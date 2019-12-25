@@ -37,8 +37,7 @@ func configureNavigationBar(largeTitleColor: UIColor, backgoundColor: UIColor, t
 
 
 extension UIViewController {
-    func setupNavigationStyle() {
-        configureNavigationBar(largeTitleColor: .white, backgoundColor: .lightRed, tintColor: .lightRed, title: "", preferredLargeTitle: true)
-        
+    func setupNavigationStyle(title: String) {
+        configureNavigationBar(largeTitleColor: .white, backgoundColor: .lightRed, tintColor: .white, title: title, preferredLargeTitle: true)
     }
 }

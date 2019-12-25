@@ -9,15 +9,31 @@
 import UIKit
 import SwiftUI
 
-class CompaniesController: UITableViewController {
+class CompaniesController: UITableViewController, CreateCompanyControllerDelgate {
+    func didAddCompany(company: Company) {
+        //1 - Modify your Array
+        companies.append(company)
+        //2 - Insert a new index path into tableView
+        let newIndexPath = IndexPath(row: companies.count - 1, section: 0)
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
+    
     let cellID = "cellID"
     
-    let companies = [
+    var companies = [
         Company(name: "Apple", founded: Date()),
         Company(name: "Amazon", founded: Date()),
         Company(name: "Google", founded: Date()),
         Company(name: "Facebook", founded: Date())
     ]
+    
+    func addCompany(company: Company) {
+        //1 - Modify your Array
+        companies.append(company)
+        //2 - Insert a new index path into tableView
+        let newIndexPath = IndexPath(row: companies.count - 1, section: 0)
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,9 +43,11 @@ class CompaniesController: UITableViewController {
     }
     
     func setupNaviagationBar() {
-        setupNavigationStyle()
+        
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Test Add", style: .plain, target: self, action: #selector(addCompany))
+//
+        setupNavigationStyle(title: "Companies")
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "plus").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
-        navigationItem.rightBarButtonItem?.tintColor = .white
     }
     
     func setupTableView() {
@@ -41,8 +59,15 @@ class CompaniesController: UITableViewController {
     
     @objc func handleAddCompany() {
         print("Adding Company")
-        let createCompanyController = CreateCompanyController()        
-        present(createCompanyController, animated: true, completion: nil)
+        let createCompanyController = CreateCompanyController()
+        let navController = UINavigationController(rootViewController: createCompanyController)
+        navController.modalPresentationStyle = .fullScreen
+        
+        createCompanyController.delegate = self
+        
+        present(navController, animated: true, completion: nil)
+        
+        
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
