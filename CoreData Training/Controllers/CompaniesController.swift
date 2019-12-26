@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftUI
+import CoreData
 
 class CompaniesController: UITableViewController, CreateCompanyControllerDelgate {
     
@@ -19,18 +20,37 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelgate
     
     let cellID = "cellID"
     var companies = [Company]()
-//    var companies = [
-//        Company(name: "Apple", founded: Date()),
-//        Company(name: "Amazon", founded: Date()),
-//        Company(name: "Google", founded: Date()),
-//        Company(name: "Facebook", founded: Date())
-//    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchCompanies()
+        
         setupTableView()
         setupNaviagationBar()
-       
+    }
+    
+    func fetchCompanies() {
+        // Initialization of CoreData Stack
+        
+        let persistentContainer = NSPersistentContainer(name: "CoreDataTrainingModels")
+        persistentContainer.loadPersistentStores { (storeDescription, err) in
+            if let err = err {
+                fatalError("Loading of store failed: \(err)")
+            }
+        }
+        
+        let context = persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        
+        do {
+            let companies = try context.fetch(fetchRequest)
+            companies.forEach { (company) in
+             
+            }
+        } catch let fetchErr{
+            print("Failed to fetch companies:", fetchErr)
+        }
     }
     
     func setupNaviagationBar() {
@@ -54,8 +74,6 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelgate
         createCompanyController.delegate = self
         
         present(navController, animated: true, completion: nil)
-        
-        
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
