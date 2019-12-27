@@ -32,25 +32,55 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelgate
     func fetchCompanies() {
         // Initialization of CoreData Stack
         
-        let persistentContainer = NSPersistentContainer(name: "CoreDataTrainingModels")
-        persistentContainer.loadPersistentStores { (storeDescription, err) in
-            if let err = err {
-                fatalError("Loading of store failed: \(err)")
-            }
-        }
-        
-        let context = persistentContainer.viewContext
+        let context = CoreDataManager.shared.persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
         
         do {
             let companies = try context.fetch(fetchRequest)
             companies.forEach { (company) in
-             
+                print(company.name ?? "")
             }
+            
+            self.companies = companies
+            self.tableView.reloadData()
         } catch let fetchErr{
             print("Failed to fetch companies:", fetchErr)
         }
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let company = self.companies[indexPath.row]
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (_, _, _) in
+           
+            print("Attempting to delete company:", company.name ?? "")
+            
+            // Remove the company from the tableView
+            self.companies.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            // Delete the company from CoreData
+            let context = CoreDataManager.shared.persistentContainer.viewContext
+            context.delete(company)
+            
+            // Without this the deletion of the object will not persist.
+            do {
+                try context.save()
+            } catch let saveError {
+                print("Failed to delete company:", saveError)
+            }
+            
+        }
+        
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { (_, _, _) in
+            print("Editing company:", company.name ?? "")
+        }
+        
+        
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
     
     func setupNaviagationBar() {

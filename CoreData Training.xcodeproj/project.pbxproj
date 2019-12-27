@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040E68A923B579C7000B287C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040E68A823B579C7000B287C /* CoreDataManager.swift */; };
 		049492EE23B5606700FEE761 /* CoreDataTrainingModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 049492EC23B5606700FEE761 /* CoreDataTrainingModels.xcdatamodeld */; };
 		04E0D10423B33250001D4A4A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E0D10323B33250001D4A4A /* AppDelegate.swift */; };
 		04E0D10623B33250001D4A4A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E0D10523B33250001D4A4A /* SceneDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		040E68A823B579C7000B287C /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		049492ED23B5606700FEE761 /* CoreDataTrainingModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataTrainingModels.xcdatamodel; sourceTree = "<group>"; };
 		04E0D10023B33250001D4A4A /* CoreData Training.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoreData Training.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04E0D10323B33250001D4A4A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				04E0D10523B33250001D4A4A /* SceneDelegate.swift */,
+				040E68A823B579C7000B287C /* CoreDataManager.swift */,
 				04E0D10323B33250001D4A4A /* AppDelegate.swift */,
 			);
 			path = Singletons;
@@ -208,6 +211,7 @@
 				04E0D10423B33250001D4A4A /* AppDelegate.swift in Sources */,
 				04E0D10623B33250001D4A4A /* SceneDelegate.swift in Sources */,
 				049492EE23B5606700FEE761 /* CoreDataTrainingModels.xcdatamodeld in Sources */,
+				040E68A923B579C7000B287C /* CoreDataManager.swift in Sources */,
 				04E0D12523B34B4D001D4A4A /* CreateCompanyController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
