@@ -11,6 +11,11 @@ import SwiftUI
 import CoreData
 
 class CompaniesController: UITableViewController, CreateCompanyControllerDelgate {
+    func didEditCompany(company: Company) {
+        let row = companies.firstIndex(of: company)
+        let reloadIndexPath = IndexPath(row: row!, section: 0)
+        tableView.reloadRows(at: [reloadIndexPath], with: .fade)
+    }
     
     func didAddCompany(company: Company) {
         companies.append(company)
@@ -74,14 +79,22 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelgate
             
         }
         
-        let editAction = UIContextualAction(style: .normal, title: "Edit") { (_, _, _) in
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { (_, view, _) in
             print("Editing company:", company.name ?? "")
+            let editCompanyController = CreateCompanyController()
+            editCompanyController.delegate = self
+            editCompanyController.company = self.companies[indexPath.row]
+            let navController = CustomNavigationController(rootViewController: editCompanyController)
+            self.present(navController, animated: true, completion: nil)
         }
         
-        
-        
+        deleteAction.backgroundColor = .lightRed
+        editAction.backgroundColor = .darkBlue
+       
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
+    
+   
     
     func setupNaviagationBar() {
         setupNavigationStyle(title: "Companies")

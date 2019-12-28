@@ -12,10 +12,17 @@ import CoreData
 // Custom Delegation
 protocol CreateCompanyControllerDelgate {
     func didAddCompany(company: Company)
+    func didEditCompany(company: Company)
 }
 
 class CreateCompanyController: UIViewController {
     var delegate: CreateCompanyControllerDelgate?
+    
+    var company: Company? {
+        didSet {
+            nameTextField.text = company?.name
+        }
+    }
     
     let nameLabel: UILabel = {
         let label = UILabel()
@@ -30,6 +37,13 @@ class CreateCompanyController: UIViewController {
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Ternary Operations
+        navigationItem.title = company == nil ? "Create Company" : "Edit Company"
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,10 +89,38 @@ class CreateCompanyController: UIViewController {
     }
     
     @objc func handleSave() {
+   
+        if company == nil {
+            createCompany()
+        } else {
+            saveCompanyChanges()
+        }
+    }
+    
+    private func saveCompanyChanges() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        company?.name = nameTextField.text
+
+        do {
+            try context.save()
+            
+            // Success
+            dismiss(animated: true, completion: nil)
+        } catch let saveError {
+            print("Failed to save company changes:", saveError)
+        }
+
+        dismiss(animated: true) {
+            self.delegate?.didEditCompany(company: self.company!)
+        }
+        
+    }
+    
+    private func createCompany() {
         print("Trying to save company...")
         // Initialization of CoreData Stack
-       let context = CoreDataManager.shared.persistentContainer.viewContext
-
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context )
         
         company.setValue(nameTextField.text, forKey: "name")
@@ -94,7 +136,6 @@ class CreateCompanyController: UIViewController {
         } catch let saveErr {
             print("Failed to save:", saveErr)
         }
-        
-        dismiss(animated: true, completion: nil)
     }
+    
 }
